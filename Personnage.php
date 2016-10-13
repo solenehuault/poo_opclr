@@ -6,7 +6,7 @@ class Personnage {
 	private $_degats = 5;
 
 	public function deplacer() {}
-	public function frapper($perso_a_frapper) {
+	public function frapper(Personnage $perso_a_frapper) {
 		//le perso_a_frapper va voir ses dégâts augmenter en fonction de la force du perso qui le frappe
 		$perso_a_frapper->_degats += $this->_force;
 	}
