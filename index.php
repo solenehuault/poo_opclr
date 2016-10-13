@@ -1,6 +1,8 @@
 <?php
 
-require 'Personnage.php';
+spl_autoload_register(function ($class) {
+	require $class.'.php';
+});
 
 function status(Personnage $perso) {
 	echo $perso->get_nom()."<br />".$perso->get_force()." force,<br />".$perso->get_experience()." experience<br />".$perso->get_degats()." dégats.<br /><br />";
