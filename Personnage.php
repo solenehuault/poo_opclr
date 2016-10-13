@@ -1,10 +1,17 @@
 <?php
 class Personnage {
+
+	//declaration des attributs
 	private $_nom = "anonyme";
 	private $_force = 1;
 	private $_localisation;
 	private $_experience = 0;
 	private $_degats = 0;
+
+	//declaration des constantes
+	const FORCE_PETITE = 5;
+	const FORCE_MOYENNE = 10;
+	const FORCE_GRANDE = 20;
 
 	//accesseur (getters) mutateurs (setters)
 	public function get_nom() {
@@ -20,18 +27,9 @@ class Personnage {
 	}
 
 	public function set_force($force) {
-		
-		if (!is_int($force)) {
-			trigger_error('La force d’un personnage doit être un nombre entier.', E_USER_WARNING);
-			return;
+		if (in_array($force, [self::FORCE_PETITE, self::FORCE_MOYENNE, self::FORCE_GRANDE])) { 
+			$this->_force = $force;
 		}
-		
-		if ($force > 100) {
-			trigger_error('La force d’un personnage ne peut dépasser 100.', E_USER_WARNING);
-			return;
-		}
-		
-		$this->_force = $force;
 	}
 
 	public function get_localisation() {
