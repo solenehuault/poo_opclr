@@ -12,9 +12,9 @@ $truc = new Personnage;
 $mopi = new Personnage;
 
 $truc->set_nom('Truc');
-$truc->set_force(10);
+$truc->set_force(Personnage::FORCE_MOYENNE);
 $mopi->set_nom('Mopi');
-$mopi->set_force(5);
+$mopi->set_force(Personnage::FORCE_PETITE);
 
 echo 'Statut initial <br />';
 status($truc);
