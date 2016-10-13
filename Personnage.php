@@ -1,10 +1,10 @@
 <?php
 class Personnage {
-	private $_nom;
+	private $_nom = "anonyme";
 	private $_force = 1;
 	private $_localisation;
 	private $_experience = 0;
-	private $_degats = 5;
+	private $_degats = 0;
 
 	//accesseur (getters) mutateurs (setters)
 	public function get_nom() {
@@ -12,7 +12,7 @@ class Personnage {
 	}
 
 	public function set_nom($nom) {
-		$this->_name = $nom;
+		$this->_nom = $nom;
 	}
 
 	public function get_force() {
