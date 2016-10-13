@@ -1,11 +1,20 @@
 <?php
 class Personnage {
+	private $_nom;
 	private $_force = 1;
 	private $_localisation;
 	private $_experience = 0;
 	private $_degats = 5;
 
 	//accesseur (getters) mutateurs (setters)
+	public function get_nom() {
+		return $this->_nom;
+	}
+
+	public function set_nom($nom) {
+		$this->_name = $nom;
+	}
+
 	public function get_force() {
 		return $this->_force;
 	}
