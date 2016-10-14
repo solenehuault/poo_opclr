@@ -3,7 +3,14 @@
 		require $class.'.php';
 	});
 
+	session_start();
+
 	require_once 'config.php';
+
+	if (isset($_GET['log_out']))
+		unset($_SESSION['brute']);
+	if (isset($_SESSION['brute']))
+		$brute = $_SESSION['brute'];
 
 	$db = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pswd);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
@@ -55,6 +62,7 @@
 			<h2>My Brute</h2>
 			<p>Name: <?= htmlspecialchars($brute->get_name()) ?></p>
 			<p>Life: <?= $brute->get_life() ?></p>
+			<p><a href="?log_out=1">Log out</a><p>
 		</div>
 
 		<div>
@@ -85,3 +93,6 @@
 		?>
 	</body>
 </html>
+<?php if (isset($brute))
+	$_SESSION['brute'] = $brute;
+?>
