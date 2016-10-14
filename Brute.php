@@ -5,9 +5,13 @@ class Brute {
 	private _name;
 	private _life;
 
-	const TARGET_INVALID = 1;
-	const TARGET_DEAD = 2;
-	const TARGET_HIT = 3;
+	const TARGET_INVALID = 1; //const returned if hit method hits itself
+	const TARGET_DEAD = 2; //const returned if hit method killed the other brute
+	const TARGET_HIT = 3; //const returned if hit method actually did hit the other brute
+
+	public function __construct(array $data) {
+		$this->hydrate($data);
+	}
 
 	//getters & setters
 	public function get_id() {
@@ -33,9 +37,18 @@ class Brute {
 			$this->_life = $life;
 	}
 
+	//hydrate function
+	public function hydrate(array $data) {
+		foreach ($data as $key => $value) {
+			$method = 'set_'.$key;
+			if ($method_exists($this, $method))
+				$this->$method($value);
+		}
+	}
 
+	
 	public function hit(Brute $brute) {
-
+		
 	}
 
 	public function get_hit() {
