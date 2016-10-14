@@ -39,6 +39,35 @@
 		else
 			$message = 'This brute does not yet exist!';
 	}
+
+	//If we hit a Brute
+	elseif (isset($_GET['hit'])) {
+		if (!isset($brute))
+			$message = 'Please create a Brute or use one.';
+		else {
+			if (!$manager->exists((int) $_GET['hit']))
+				$message = 'The Brute you want to hit doesn’t exist!';
+			else {
+				$brute_to_hit = $manager->get((int) $_GET['hit']);
+				$back = $brute->hit($brute_to_hit);
+				switch ($back) {
+					case Brute::TARGET_INVALID:
+						$message = 'Invalid target';
+						break;
+					case Brute::TARGET_HIT:
+						$message = 'You hit it!';
+						$manager->update($brute);
+						$manager->update($brute_to_hit);
+						break;
+					case Brute::TARGET_DEAD:
+						$message = 'You killed it!';
+						$manager->update($brute);
+						$manager->delete($brute_to_hit);
+						break;
+				}					
+			}
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +102,7 @@
 					echo '<p>There is no one to hit, create a Brute!</p>';
 				else {
 					foreach ($brutes as $a_brute)
-						echo '<p><a href="?frapper='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().')</p>';
+						echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().')</p>';
 				}
 			?>
 		</div>
