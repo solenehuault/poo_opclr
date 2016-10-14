@@ -65,5 +65,9 @@ class Brute {
 			return self::TARGET_DEAD;
 		return self::TARGET_HIT;
 	}
+
+	public function valid_name() {
+		return !empty($this->_nom);
+	}
 }
 ?>
