@@ -18,7 +18,7 @@ class Brute {
 		return $this->_id;
 	}
 	
-	public function set_id() {
+	public function set_id($id) {
 		$id = (int) $id;
 		if ($id > 0)
 			$this->_id = $id;
