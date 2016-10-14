@@ -68,7 +68,8 @@ class BrutesManager {
 	public function count() {
 		$sql = 'SELECT COUNT(*) FROM brutes';
 		$query = $this->_db->prepare($sql);
-		return (int) $query->fetchColumn();
+		$query->execute();
+		return $query->fetchColumn();
 	}
 
 	//get the list of all the brutes exept one
