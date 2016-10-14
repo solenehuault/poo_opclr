@@ -56,6 +56,7 @@ class BrutesManager {
 		$query->execute();
 	}
 
+	//delete() deletes the information of a particular brute
 	public function delete(Brute $brute) {
 		$sql = 'DELETE FROM brutes WHERE id= :id';
 		$query = $this-_db->prepare($sql);
@@ -63,12 +64,15 @@ class BrutesManager {
 		$query->execute();
 	}
 
+	//Count the number of brutes in the db
 	public function count() {
-
+		$sql = 'SELECT COUNT(*) FROM brutes';
+		$query = $this->_db->query($sql);
+		return $query->fetchColumn();
 	}
 
 	public function get_list($name) {
-
+		
 	}
 }
 ?>
