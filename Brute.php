@@ -48,11 +48,16 @@ class Brute {
 
 	
 	public function hit(Brute $brute) {
-		
+		if ($brute->get_id() == $thid->_id)
+			return self::TARGET_INVALID;
+		return $brute->is_hit();
 	}
 
-	public function get_hit() {
-
+	public function is_hit() {
+		$this->_life -= 5;
+		if ($this->_life <= 0)
+			return self::TARGET_DEAD;
+		return self::TARGET_HIT;
 	}
 }
 ?>
