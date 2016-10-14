@@ -1,9 +1,9 @@
 <?php
 
 class Brute {
-	private _id;
-	private _name;
-	private _life;
+	private $_id;
+	private $_name;
+	private $_life;
 
 	const TARGET_INVALID = 1; //const returned if hit method hits itself
 	const TARGET_DEAD = 2; //const returned if hit method killed the other brute
@@ -47,7 +47,7 @@ class Brute {
 	public function hydrate(array $data) {
 		foreach ($data as $key => $value) {
 			$method = 'set_'.$key;
-			if ($method_exists($this, $method))
+			if (method_exists($this, $method))
 				$this->$method($value);
 		}
 	}
@@ -67,7 +67,7 @@ class Brute {
 	}
 
 	public function valid_name() {
-		return !empty($this->_nom);
+		return !empty($this->_name);
 	}
 }
 ?>
