@@ -47,8 +47,13 @@ class BrutesManager {
 		]);
 	}
 
+	//update() update the life of a particular Brute
 	public function update(Brute $brute) {
-		
+		$sql = 'UPDATE brutes SET life = :life WHERE id = :id';
+		$query = $this->_db->prepare($sql);
+		$query->bindValue(':life', $brute->get_life());
+		$query->bindValue(':id', $brute->get_id());
+		$quer->execute();
 	}
 
 	public function delete(Brute $brute) {
