@@ -10,6 +10,8 @@ class BrutesManager {
 		$this->_db = $db;
 	}
 
+	//exists() can take a int or a string as arg, and seek in the db for an matching id or name
+	//return a bool depending is the Brute exist or not
 	public function exists($info) {
 		$sql = (is_int($info))?
 			'SELECT * FROM brutes WHERE id = :info':
@@ -20,10 +22,20 @@ class BrutesManager {
 		return (bool) $query->fetchColumn();
 	}
 
+	//get() can take a int or a str as arg, and seek in the db for a matching id or name
+	//return the information associated
 	public function get($info) {
-
+		$sql = (is_int($info))?
+			'SELECT * FROM brutes WHERE id = :info':
+			'SELECT * FROM brutes WHERE name = :info';
+		$query = $this->_db->prepare($sql);
+		$query->bindValue(':info', $info);
+		$query->execute();
+		$data = $query->fetch(PDO::FETCH_ASSOC);
+		return new Brute($data);
 	}
 
+	//add() take an Brute instance as arg, insert the name in the db, then hydrate the Brute instance
 	public function add(Brute $brute) {
 		$sql = 'INSERT INTO brutes (name) VALUES (:name)';
 		$query = $this->_db->prepare($sql);
