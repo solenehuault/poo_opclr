@@ -5,7 +5,7 @@
 
 	require_once 'config.php';
 
-	$db = new PDO('mysql:host='.$db_host.';dbname:='.$db_name, $db_user, $db_pswd);
+	$db = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pswd);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 	$manager = new BrutesManager($db);
@@ -48,13 +48,40 @@
 
 		<?php if (isset($message))
 			echo '<p>'.$message.'</p>';
+
+			if (isset($brute)) {
+		?>
+		<div>
+			<h2>My Brute</h2>
+			<p>Name: <?= htmlspecialchars($brute->get_name()) ?></p>
+			<p>Life: <?= $brute->get_life() ?></p>
+		</div>
+
+		<div>
+			<h2>All the other Brutes</h2>
+			<?php
+				$brutes = $manager->get_list($brute->get_name());
+				if (empty($brutes))
+					echo '<p>There is no one to hit, create a Brute!</p>';
+				else {
+					foreach ($brutes as $a_brute)
+						echo '<p><a href="?frapper='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().')</p>';
+				}
+			?>
+		</div>
+		<?php 
+			} else {
 		?>
 
-		<form method="post" action="">
+		<form method="post" action="" id="form">
 			<label for="name">Name:</label>
 			<input id="name" name="name" type="text" />
 			<button form="form" name="create" type="submit">Create this Brute</button>
 			<button form="form" name="use" type="submit">Use this Brute</button>
 		</form>
+
+		<?php
+			}
+		?>
 	</body>
 </html>
