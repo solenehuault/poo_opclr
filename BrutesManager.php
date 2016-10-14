@@ -11,7 +11,7 @@ class BrutesManager {
 	}
 
 	public function exists($info) {
-
+		
 	}
 
 	public function get($info) {
@@ -19,6 +19,14 @@ class BrutesManager {
 	}
 
 	public function add(Brute $brute) {
+		$sql = 'INSERT INTO brutes (name) VALUES (:name)';
+		$query = $this->_db->prepare($sql);
+		$query->bindValue(':name', $brute->get_name());
+		$query->execute();
+		$brute->hydrate([
+			'id' => $this->_db->lastInsertId(),
+			'life' => 100
+		]);
 	}
 
 	public function update(Brute $brute) {
