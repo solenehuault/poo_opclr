@@ -1,3 +1,31 @@
+<?php
+	spl_autoload_register(function($class) {
+		require $class.'.php';
+	});
+
+	require_once 'config.php';
+
+	$db = new PDO('mysql:host='.$db_host.';dbname:='.$db_name, $db_user, $db_pswd);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+	$maneger = new BrutesManager($db);
+
+	//If we create a Brute
+	if (isset($_POST['create']) && isset($_POST['name'])) {
+		$brute = new Brute(['name' => $_POST['name']]);
+		if (!$brute->valid_name()) {
+			$message = 'This is an invalid name.';
+			unset($brute);
+		}
+		elseif ($manager->exists($brute->get_name())) {
+			$message = 'This particular Brute already exists.';
+			unset($brute);
+		}
+		else
+			$manager->add($brute);
+	}
+?>
+
 <!DOCTYPE html>
 <html>
 	<head>
