@@ -8,7 +8,7 @@
 	$db = new PDO('mysql:host='.$db_host.';dbname:='.$db_name, $db_user, $db_pswd);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
-	$maneger = new BrutesManager($db);
+	$manager = new BrutesManager($db);
 
 	//If we create a Brute
 	if (isset($_POST['create']) && isset($_POST['name'])) {
@@ -41,7 +41,15 @@
 		<meta charset="utf-8" />
 	</head>
 	<body>
-		<h1>Brute Game</h1>
+		<div>
+			<h1>Brute Game</h1>
+			<p>Number of Brutes created: <?= $manager->count() ?></p>
+		</div>
+
+		<?php if (isset($message))
+			echo '<p>'.$message.'</p>';
+		?>
+
 		<form method="post" action="">
 			<label for="name">Name:</label>
 			<input id="name" name="name" type="text" />
