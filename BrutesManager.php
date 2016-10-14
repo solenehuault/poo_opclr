@@ -1,12 +1,12 @@
 <?php
 class BrutesManager {
-	private $_bd;
+	private $_db;
 
 	public function __construct($db) {
 		$this->set_db($db);
 	}
 
-	public function set_db($bd) {
+	public function set_db($db) {
 		$this->_db = $db;
 	}
 
@@ -67,8 +67,8 @@ class BrutesManager {
 	//Count the number of brutes in the db
 	public function count() {
 		$sql = 'SELECT COUNT(*) FROM brutes';
-		$query = $this->_db->query($sql);
-		return $query->fetchColumn();
+		$query = $this->_db->prepare($sql);
+		return (int) $query->fetchColumn();
 	}
 
 	//get the list of all the brutes exept one
