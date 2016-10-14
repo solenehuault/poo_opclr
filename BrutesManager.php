@@ -59,7 +59,7 @@ class BrutesManager {
 	//delete() deletes the information of a particular brute
 	public function delete(Brute $brute) {
 		$sql = 'DELETE FROM brutes WHERE id= :id';
-		$query = $this-_db->prepare($sql);
+		$query = $this->_db->prepare($sql);
 		$query->bindValue(':id', $brute->get_id());
 		$query->execute();
 	}
