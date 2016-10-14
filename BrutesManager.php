@@ -11,7 +11,13 @@ class BrutesManager {
 	}
 
 	public function exists($info) {
-		
+		$sql = (is_int($info))?
+			'SELECT * FROM brutes WHERE id = :info':
+			'SELECT * FROM brutes WHERE name = :info';
+		$query = $this->_db->prepare($sql);
+		$query->bindValue(':info', $info);
+		$query->execute();
+		return (bool) $query->fetchColumn();
 	}
 
 	public function get($info) {
