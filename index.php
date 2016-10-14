@@ -24,6 +24,14 @@
 		else
 			$manager->add($brute);
 	}
+
+	//If we use a Brute
+	elseif (isset($_POST['use']) && isset($_POST['name'])) {
+		if ($manager->exists($_POST['name']))
+			$brute = $manager->get($_POST['name']);
+		else
+			$message = 'This brute does not yet exist!';
+	}
 ?>
 
 <!DOCTYPE html>
