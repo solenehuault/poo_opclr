@@ -83,5 +83,16 @@ class BrutesManager {
 			$brutes[] = new Brute($data);
 		return $brutes;
 	}
+
+	//get the list of all brutes
+	public function list_all() {
+		$sql = 'SELECT * FROM brutes ORDER BY name';
+		$query = $this->_db->prepare($sql);
+		$query->execute();
+		$brutes = [];
+		while ($data = $query->fetch(PDO::FETCH_ASSOC))
+			$brutes[] = new Brute($data);
+		return $brutes;
+	}
 }
 ?>
