@@ -43,16 +43,20 @@ class BrutesManager {
 		$query->execute();
 		$brute->hydrate([
 			'id' => $this->_db->lastInsertId(),
-			'life' => 100
+			'life' => 100,
+			'strength' => 1,
+			'xp' => 0
 		]);
 	}
 
 	//update() update the life of a particular Brute
 	public function update(Brute $brute) {
-		$sql = 'UPDATE brutes SET life = :life WHERE id = :id';
+		$sql = 'UPDATE brutes SET life = :life, strength = :strength, xp = :xp WHERE id = :id';
 		$query = $this->_db->prepare($sql);
 		$query->bindValue(':life', $brute->get_life());
-		$query->bindValue(':id', $brute->get_id());
+		$query->bindValue(':strength', $brute->get_strength());
+		$query->bindValue(':xp', $brute->get_xp());
+		$query->bindValue(':id', $brute->get_id());	
 		$query->execute();
 	}
 

@@ -56,11 +56,13 @@
 						break;
 					case Brute::TARGET_HIT:
 						$message = 'You hit it!';
+						$brute->gain_xp($brute, 1);
 						$manager->update($brute);
 						$manager->update($brute_to_hit);
 						break;
 					case Brute::TARGET_DEAD:
 						$message = 'You killed it!';
+						$brute->gain_xp($brute, 2);
 						$manager->update($brute);
 						$manager->delete($brute_to_hit);
 						break;
@@ -91,6 +93,8 @@
 			<h2>My Brute</h2>
 			<p>Name: <?= htmlspecialchars($brute->get_name()) ?></p>
 			<p>Life: <?= $brute->get_life() ?></p>
+			<p>Xp: <?= $brute->get_xp() ?><p>
+			<p>Strength: <?= $brute->get_strength() ?></p>
 			<p><a href="?log_out=1">Log out</a><p>
 		</div>
 
@@ -102,7 +106,7 @@
 					echo '<p>There is no one to hit, create a Brute!</p>';
 				else {
 					foreach ($brutes as $a_brute)
-						echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().')</p>';
+						echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().', xp: '.$a_brute->get_xp().', strength: '.$a_brute->get_strength().')</p>';
 				}
 			?>
 		</div>
