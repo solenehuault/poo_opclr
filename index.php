@@ -116,6 +116,16 @@
 			<button form="form" name="create" type="submit">Create this Brute</button>
 			<button form="form" name="use" type="submit">Use this Brute</button>
 		</form>
+		<h2>Brutes created</h2>
+		<?php
+			$brutes = $manager->list_all();
+			if (empty($brutes))
+				echo '<p>There is no brutes created, hurry create your Brute!</p>';
+			else {
+				foreach ($brutes as $brute)
+					echo '<p>'.$brute->get_name().'</p>';
+			}
+		?>
 
 		<?php
 			}
