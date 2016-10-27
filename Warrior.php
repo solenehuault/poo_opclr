@@ -1,6 +1,6 @@
 <?php
 class Warrior extends Brute {
-	public function is_hit(Brute $brutte_hitter) {
+	public function is_hit(Brute $brute_hitter) {
 		if ($this->_life >= 0 && $this->_life <= 25)
 			$this->_asset = 5;
 		elseif ($this->_life > 25 && $this->_life <= 50)
@@ -12,11 +12,11 @@ class Warrior extends Brute {
 		else
 			$this->_asset = 1;
 
-		$this->_life -= $brute_hitter->_strength + $this->_asset;
+		$this->_life -= ($brute_hitter->_strength - $this->_asset);
 
 		if ($this->_life <= 0)
 			return self::TARGET_DEAD;
-		return self::TARGET_HIT
+		return self::TARGET_HIT;
 	}
 }
 ?>
