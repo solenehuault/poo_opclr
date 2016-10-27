@@ -52,9 +52,10 @@ class BrutesManager {
 		$brute->hydrate([
 			'id' => $this->_db->lastInsertId(),
 			'life' => 100,
-			'strength' => 3,
+			'strength' => 1,
 			'xp' => 0,
-			'asset' => 1
+			'asset' => 1,
+			'time_asleep' => 0
 		]);
 	}
 
