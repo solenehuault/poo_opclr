@@ -19,17 +19,29 @@
 
 	//If we create a Brute
 	if (isset($_POST['create']) && isset($_POST['name'])) {
-		$brute = new Brute(['name' => $_POST['name']]);
-		if (!$brute->valid_name()) {
-			$message = 'This is an invalid name.';
-			unset($brute);
+		switch ($_POST['type']) {
+			case 'warrior':
+				$brute = new Warrior(['name' => $_POST['name']]);
+				break;
+			case 'wizard':
+				$brute = new Wizard(['name' => $_POST['name']]);
+				break;
+			default:
+				$message = 'Brute type is invalid.';
+				break;
 		}
-		elseif ($manager->exists($brute->get_name())) {
-			$message = 'This particular Brute already exists.';
-			unset($brute);
+		if (isset($brute)) {
+			if (!$brute->valid_name()) {
+				$message = 'This is an invalid name.';
+				unset($brute);
+			}
+			elseif ($manager->exists($brute->get_name())) {
+				$message = 'This particular Brute already exists.';
+				unset($brute);
+			}
+			else
+				$manager->add($brute);
 		}
-		else
-			$manager->add($brute);
 	}
 
 	//If we use a Brute
@@ -67,7 +79,42 @@
 						$manager->update($brute);
 						$manager->delete($brute_to_hit);
 						break;
+					case Brute::TARGET_ASLEEP:
+						$message = 'Your Brute is asleep, you can’t hit anyone!';
+						break;
 				}					
+			}
+		}
+	}
+
+	elseif (isset($_GET['enchant'])) {
+		if (!isset($brute))
+			$message = 'Please create a Brute or use one.';
+		else {
+			//if brute is a wizard
+			if ($brute->get_type() != 'wizard')
+				$message = 'Only wizard can enchant Brutes!';
+			else {
+				if (!manager->exists((int) $_GET['enchant']))
+					$message = 'The Brute you want to enchant doesn’t exist!';
+				else {
+					$brute_to_enchant = $manager->get((int) $_GET['enchant']);
+					$back = $brute->cast_spell($brute_to_enchant);
+
+					switch ($back) {
+						case Brute::TARGET_INVALID:
+							$message = 'You cannot enchant yourself.';
+							break;
+						case Brute::TARGET_SPELLED:
+							$message = 'You enchanted it!';
+							$manager->update($brute);
+							$manager->update($brute_to_enchant);
+							break;
+						case Brute::TARGET_ASLEEP:
+							$message = 'Your Brute is asleep, you can’t enchant anyone';
+							break;
+					}
+				}
 			}
 		}
 	}
@@ -76,7 +123,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Brute Game</title>
+		<title>Brute Game v2</title>
 		<meta charset="utf-8" />
 	</head>
 	<body>
@@ -93,6 +140,7 @@
 		<div>
 			<h2>My Brute</h2>
 			<p>Name: <?= htmlspecialchars($brute->get_name()) ?></p>
+			<p>Type: <?= ucfirst($brute->get_type()) ?></p>
 			<p>Life: <?= $brute->get_life() ?></p>
 			<p>Xp: <?= $brute->get_xp() ?><p>
 			<p>Strength: <?= $brute->get_strength() ?></p>
@@ -106,8 +154,16 @@
 				if (empty($brutes))
 					echo '<p>There is no one to hit, create a Brute!</p>';
 				else {
-					foreach ($brutes as $a_brute)
-						echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().', xp: '.$a_brute->get_xp().', strength: '.$a_brute->get_strength().')</p>';
+					if ($brute->is_asleep())
+						echo '<p>A Wizard has set you asleep! You will wake up in '.$brute->wake_up().'.</p>';
+					else {
+						foreach ($brutes as $a_brute) {
+							echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().', xp: '.$a_brute->get_xp().', strength: '.$a_brute->get_strength().', type: '.$a_brute->get_type().')';
+							if ($brute->get_type() == 'wizard')
+								echo ' <a href="?enchant='.$a_brute->get_id().'">Cast a spell</a>';
+							echo '</p>';
+						}
+					}
 				}
 			?>
 		</div>
@@ -118,8 +174,13 @@
 		<form method="post" action="" id="form">
 			<label for="name">Name:</label>
 			<input id="name" name="name" type="text" />
-			<button form="form" name="create" type="submit">Create this Brute</button>
 			<button form="form" name="use" type="submit">Use this Brute</button>
+			<label for="type">Type:</label>
+			<select name="type">
+				<option value="warrior">Warrior</option>
+				<option value="wizard">Wizard</option>
+			</select>
+			<button form="form" name="create" type="submit">Create this Brute</button>
 		</form>
 		<h2>Brutes created</h2>
 		<?php
