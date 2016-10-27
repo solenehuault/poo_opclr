@@ -95,7 +95,7 @@
 			if ($brute->get_type() != 'wizard')
 				$message = 'Only wizard can enchant Brutes!';
 			else {
-				if (!manager->exists((int) $_GET['enchant']))
+				if (!$manager->exists((int) $_GET['enchant']))
 					$message = 'The Brute you want to enchant doesn’t exist!';
 				else {
 					$brute_to_enchant = $manager->get((int) $_GET['enchant']);
@@ -155,10 +155,10 @@
 					echo '<p>There is no one to hit, create a Brute!</p>';
 				else {
 					if ($brute->is_asleep())
-						echo '<p>A Wizard has set you asleep! You will wake up in '.$brute->wake_up().'.</p>';
+						echo '<p>Thanks to a Wizard, your Brute is snoring… It will wake up in '.$brute->wake_up().'.</p>';
 					else {
 						foreach ($brutes as $a_brute) {
-							echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().', xp: '.$a_brute->get_xp().', strength: '.$a_brute->get_strength().', type: '.$a_brute->get_type().')';
+							echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().' | xp: '.$a_brute->get_xp().' | strength: '.$a_brute->get_strength().' | type: '.$a_brute->get_type().')';
 							if ($brute->get_type() == 'wizard')
 								echo ' <a href="?enchant='.$a_brute->get_id().'">Cast a spell</a>';
 							echo '</p>';
