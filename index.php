@@ -87,6 +87,7 @@
 		}
 	}
 
+	//If we enchant a Brute
 	elseif (isset($_GET['enchant'])) {
 		if (!isset($brute))
 			$message = 'Please create a Brute or use one.';
@@ -118,6 +119,30 @@
 			}
 		}
 	}
+
+	elseif (isset($_GET['heal'])) {
+		if (!isset($brute))
+			$message = 'Please create a Brute or use one.';
+		else {
+			//if brute is a wizard
+			if ($brute->get_type() != 'wizard')
+				$message = 'Only wizard can enchant Brutes!';
+			else {
+				if (!$manager->exists((int) $_GET['heal']))
+					$message = 'The Brute you want to enchant doesn’t exist!';
+				else {
+					$brute_to_heal = $manager->get((int) $_GET['heal']);
+					if ($brute_to_heal->get_life() < 100)
+						$brute->get_life();
+						$brute->heal($brute_to_heal, 10);
+					if ($brute_to_heal->get_life() > 100)
+						$brute_to_heal->set_life(100);
+					$manager->update($brute_to_heal);
+					$message = 'You heal it!';
+				}
+			}
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -142,8 +167,11 @@
 			<p>Name: <?= htmlspecialchars($brute->get_name()) ?></p>
 			<p>Type: <?= ucfirst($brute->get_type()) ?></p>
 			<p>Life: <?= $brute->get_life() ?></p>
-			<p>Xp: <?= $brute->get_xp() ?><p>
+			<p>Xp: <?= $brute->get_xp() ?></p>
 			<p>Strength: <?= $brute->get_strength() ?></p>
+			<?php if ($brute->get_type() == 'wizard')
+				echo '<p><a href="?heal='.$brute->get_id().'">Heal</a></p>';
+			?>
 			<p><a href="?log_out=1">Log out</a><p>
 		</div>
 
@@ -159,8 +187,10 @@
 					else {
 						foreach ($brutes as $a_brute) {
 							echo '<p><a href="?hit='.$a_brute->get_id().'">'.htmlspecialchars($a_brute->get_name()).'</a> (life: '.$a_brute->get_life().' | xp: '.$a_brute->get_xp().' | strength: '.$a_brute->get_strength().' | type: '.$a_brute->get_type().')';
-							if ($brute->get_type() == 'wizard')
+							if ($brute->get_type() == 'wizard') {
 								echo ' <a href="?enchant='.$a_brute->get_id().'">Cast a spell</a>';
+								echo ' <a href="?heal='.$a_brute->get_id().'">Heal</a>';
+							}
 							echo '</p>';
 						}
 					}
