@@ -1,18 +1,24 @@
 <?php
 
 class Brute {
-	private $_id;
-	private $_name;
-	private $_life;
-	private $_strength;
-	private $_xp;
+	protected $_id,
+						$_name,
+						$_life,
+						$_strength,
+						$_xp,
+						$_asset,
+						$_time_asleep,
+						$_type;
 
 	const TARGET_INVALID = 1; //const returned if hit method hits itself
 	const TARGET_DEAD = 2; //const returned if hit method killed the other brute
 	const TARGET_HIT = 3; //const returned if hit method actually did hit the other brute
+	const TARGET_SPELLED = 4; //const returned from cast_spell if method actually spelled the other brute
+	const TARGET_ASLEEP = 5; //const returned from hit method if target is asleep
 
 	public function __construct(array $data) {
 		$this->hydrate($data);
+		$this->type = strtolower(static::class);
 	}
 
 	//getters & setters
@@ -21,6 +27,9 @@ class Brute {
 	public function get_life() { return $this->_life; }
 	public function get_strength() { return $this->_strength;	}
 	public function get_xp() { return $this->_xp;	}
+	public function get_asset() { return $this->_asset; }
+	public function get_time_asleep() { return $this->_time_asleep; }
+	public function get_type() { return $this->_type; }
 	
 	public function set_id($id) {
 		$id = (int) $id;
@@ -51,6 +60,16 @@ class Brute {
 			$this->_xp = $xp;
 	}
 
+	public function set_asset($asset) {
+		$asset = (int) $asset;
+		if ($asset >= 0 && $asset <= 5)
+			$this->_asset = $asset;
+	}
+
+	public function set_time_asleep($time) {
+		$this->_time_asleep = (int) $time;
+	}
+
 	//hydrate function
 	public function hydrate(array $data) {
 		foreach ($data as $key => $value) {
@@ -63,6 +82,10 @@ class Brute {
 	public function hit(Brute $brute) {
 		if ($brute->get_id() == $this->_id)
 			return self::TARGET_INVALID;
+
+		if ($this->is_asleep())
+			return self::TARGET_ASLEEP;
+
 		return $brute->is_hit($this);
 	}
 
@@ -71,6 +94,26 @@ class Brute {
 		if ($this->_life <= 0)
 			return self::TARGET_DEAD;
 		return self::TARGET_HIT;
+	}
+
+	public function is_asleep() {
+		return $this->_time_asleep > time();
+	}
+
+	public function get_up() {
+		$sec = $this->_time_asleep;
+		$sec -= time();
+		
+		$hours = floor($sec / 3600);
+		$sec -= $hours * 3600;
+		$min = floor($sec / 60);
+		$sec -= $min * 60;
+
+		$hours .= $hours <= 1 ? ' hour' : ' hours';
+		$min .= $min <= 1 ? ' minute' : ' minutes';
+		$sec .= $sec <= 1 ? ' seconde' : ' secondes';
+
+		return $hours.', '.$min.' and '.$sec;
 	}
 
 	public function gain_xp(Brute $brute, $xp) {
