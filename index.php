@@ -56,13 +56,14 @@
 						break;
 					case Brute::TARGET_HIT:
 						$message = 'You hit it!';
-						$brute->gain_xp($brute, 1);
+						$brute->gain_xp($brute, 2);
+						$brute_to_hit->gain_xp($brute_to_hit, 1);
 						$manager->update($brute);
 						$manager->update($brute_to_hit);
 						break;
 					case Brute::TARGET_DEAD:
 						$message = 'You killed it!';
-						$brute->gain_xp($brute, 2);
+						$brute->gain_xp($brute, 3);
 						$manager->update($brute);
 						$manager->delete($brute_to_hit);
 						break;
@@ -101,7 +102,7 @@
 		<div>
 			<h2>All the other Brutes</h2>
 			<?php
-				$brutes = $manager->get_list($brute->get_name());
+				$brutes = $manager->list($brute->get_name());
 				if (empty($brutes))
 					echo '<p>There is no one to hit, create a Brute!</p>';
 				else {
