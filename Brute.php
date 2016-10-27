@@ -16,9 +16,11 @@ class Brute {
 	}
 
 	//getters & setters
-	public function get_id() {
-		return $this->_id;
-	}
+	public function get_id() { return $this->_id; }
+	public function get_name() { return $this->_name; }
+	public function get_life() { return $this->_life; }
+	public function get_strength() { return $this->_strength;	}
+	public function get_xp() { return $this->_xp;	}
 	
 	public function set_id($id) {
 		$id = (int) $id;
@@ -26,17 +28,9 @@ class Brute {
 			$this->_id = $id;
 	}
 
-	public function get_name() {
-		return $this->_name;
-	}
-
 	public function set_name($name) {
 		if (is_string($name))
 			$this->_name = $name;
-	}
-	
-	public function get_life() {
-		return $this->_life;
 	}
 
 	public function set_life($life) {
@@ -45,19 +39,11 @@ class Brute {
 			$this->_life = $life;
 	}
 
-	public function get_strength() {
-		return $this->_strength;
-	}
-
 	public function set_strength($strength) {
 		$strength = (int) $strength;
 		if ($strength >= 0 && $strength <= 100)
 			$this->_strength = $strength;
 	}	
-
-	public function get_xp() {
-		return $this->_xp;
-	}
 
 	public function set_xp($xp) {
 		$xp = (int) $xp;
@@ -73,10 +59,9 @@ class Brute {
 				$this->$method($value);
 		}
 	}
-
 	
 	public function hit(Brute $brute) {
-		if ($brute->get_id() == $thid->_id)
+		if ($brute->get_id() == $this->_id)
 			return self::TARGET_INVALID;
 		return $brute->is_hit($this);
 	}
@@ -92,7 +77,7 @@ class Brute {
 		$xp = (int) $xp;
 		if ($xp > 0 && $xp < 10)
 			$this->_xp += $xp;
-		if ($this->_xp == 100) {
+		if ($this->_xp >= 100) {
 			$this->set_xp(0);
 			$this->_strength++;
 		}	
