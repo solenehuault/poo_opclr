@@ -18,7 +18,7 @@ class Brute {
 
 	public function __construct(array $data) {
 		$this->hydrate($data);
-		$this->type = strtolower(static::class);
+		$this->_type = strtolower(static::class);
 	}
 
 	//getters & setters
@@ -100,7 +100,7 @@ class Brute {
 		return $this->_time_asleep > time();
 	}
 
-	public function get_up() {
+	public function wake_up() {
 		$sec = $this->_time_asleep;
 		$sec -= time();
 		
